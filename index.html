@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rokto Bondhu - ঢাকায় রক্ত খুঁজুন</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style> body{font-family: 'Hind Siliguri', sans-serif;} </style>
+</head>
+<body class="bg-[#FFF5F5] min-h-screen">
+
+<!-- হেডার -->
+<header class="bg-white shadow-sm sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-red-600">🩸 Rokto Bondhu</h1>
+    <a href="#form" class="bg-red-600 text-white px-4 py-2 rounded-full text-sm">ডোনার হবো</a>
+  </div>
+</header>
+
+<!-- সার্চ বক্স -->
+<div class="max-w-5xl mx-auto px-4 mt-6">
+  <div class="bg-white p-6 rounded-[24px] shadow-lg">
+    <h2 class="text-xl font-bold mb-4">রক্ত খুঁজুন</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <select id="bloodGroup" class="border-2 border-red-100 p-3 rounded-xl w-full focus:border-red-500 outline-none">
+        <option value="">সব ব্লাড গ্রুপ</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+      </select>
+      <input id="areaSearch" type="text" placeholder="এলাকা লিখুন, যেমন: Mirpur" class="border-2 border-red-100 p-3 rounded-xl w-full focus:border-red-500 outline-none">
+      <button onclick="filterDonors()" class="bg-red-600 text-white p-3 rounded-xl font-bold">খুঁজুন</button>
+    </div>
+  </div>
+
+  <!-- ডোনার লিস্ট -->
+  <div id="donorList" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pb-20"></div>
+</div>
+
+<script>
+// এখানে তুমি ডোনার যোগ করবে। শুধু এই লিস্টটা এডিট করলেই হবে
+const donors = [
+  { name: "Shawon Ahmed", blood: "O+", area: "Mirpur 10", phone: "01700000001", lastDonate: "2 মাস আগে" },
+  { name: "Rahim Islam", blood: "A+", area: "Dhanmondi", phone: "01700000002", lastDonate: "1 মাস আগে" },
+  { name: "Karim Uddin", blood: "B+", area: "Uttara", phone: "01700000003", lastDonate: "3 মাস আগে" },
+  { name: "Fatema Akter", blood: "AB+", area: "Mohammadpur", phone: "01700000004", lastDonate: "Available" },
+  { name: "Sakib Hasan", blood: "O+", area: "Mirpur 2", phone: "01700000005", lastDonate: "Available" },
+  { name: "Nusrat Jahan", blood: "A-", area: "Gulshan", phone: "01700000006", lastDonate: "Available" }
+];
+
+function render(list){
+  const container = document.getElementById('donorList');
+  container.innerHTML = "";
+  if(list.length === 0){
+    container.innerHTML = `<p class="col-span-2 text-center py-10 text-gray-500">কোন ডোনার পাওয়া যায়নি। অন্য এলাকা লিখে দেখুন।</p>`;
+    return;
+  }
+  list.forEach(d => {
+    container.innerHTML += `
+      <div class="bg-white p-5 rounded-[20px] shadow-sm border border-red-50 flex justify-between items-center">
+        <div>
+          <h3 class="font-bold text-lg">${d.name}</h3>
+          <p class="text-sm text-gray-500">${d.area} • শেষ দান: ${d.lastDonate}</p>
+          <span class="inline-block mt-2 bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-bold">${d.blood}</span>
+        </div>
+        <a href="tel:${d.phone}" class="bg-green-500 text-white px-5 py-3 rounded-full font-bold">কল করুন</a>
+      </div>
+    `;
+  });
+}
+
+function filterDonors(){
+  const blood = document.getElementById('bloodGroup').value;
+  const area = document.getElementById('areaSearch').value.toLowerCase();
+  const filtered = donors.filter(d => {
+    const matchBlood = blood === "" || d.blood === blood;
+    const matchArea = d.area.toLowerCase().includes(area);
+    return matchBlood && matchArea;
+  });
+  render(filtered);
+}
+
+render(donors);
+</script>
+</body>
+          </html>
